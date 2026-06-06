@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Hero ─────────────────────────────────────────────────────────────────────
+
+model HeroSlide {
+  id           String                 @id @default(cuid())
+  order        Int                    @default(0)
+  isActive     Boolean                @default(true)
+  mediaType    MediaType              @default(IMAGE)
+  mediaUrl     String
+  thumbnailUrl String?
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
+
+  translations HeroSlideTranslation[]
+
+  @@map("hero_slides")
+}
+
+model HeroSlideTranslation {
+  id       String    @id @default(cuid())
+  slide    HeroSlide @relation(fields: [slideId], references: [id], onDelete: Cascade)
+  slideId  String
+  locale   Locale
+  title    String
+  subtitle String?
+  ctaLabel String?
+  ctaUrl   String?
+
+  @@unique([slideId, locale])
+  @@map("hero_slide_translations")
+}
+
+// ─── Packages ─────────────────────────────────────────────────────────────────
+
+model Package {
+  id          String               @id @default(cuid())
+  slug        String               @unique
+  price       Decimal              @db.Decimal(10, 2)
+  currency    String               @default("MXN")
+  durationMin Int?
+  isActive    Boolean              @default(true)
+  order       Int                  @default(0)
+  coverImage  String?
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+
+  translations PackageTranslation[]
+
+  @@map("packages")
+}
+
+model PackageTranslation {
+  id          String   @id @default(cuid())
+  package     Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  packageId   String
+  locale      Locale
+  name        String
+  description String?
+  includes    String[]
+
+  @@unique([packageId, locale])
+  @@map("package_translations")
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+enum Locale {
+  es
+  en
+}

@@ -1,26 +1,79 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --nohoch-dark: #02373f;
+  --nohoch-deep: #042f35;
+  --nohoch-teal: #006f73;
+  --nohoch-teal-soft: #008f8c;
+  --nohoch-mustard: #b4b000;
+  --nohoch-sand: #f5f0d8;
+  --nohoch-white: #ffffff;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  min-height: 100vh;
+  background: var(--nohoch-deep);
+  color: var(--nohoch-white);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: var(--nohoch-mustard);
+  color: var(--nohoch-deep);
+}
+
+.nohoch-organic-top {
+  clip-path: polygon(
+    0 25%,
+    8% 45%,
+    18% 30%,
+    28% 52%,
+    39% 28%,
+    50% 45%,
+    61% 25%,
+    72% 48%,
+    84% 30%,
+    94% 46%,
+    100% 28%,
+    100% 100%,
+    0 100%
+  );
+}
+
+.nohoch-organic-bottom {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 70%,
+    92% 55%,
+    82% 75%,
+    70% 58%,
+    59% 82%,
+    48% 62%,
+    36% 80%,
+    25% 57%,
+    13% 75%,
+    0 58%
+  );
+}
+
+.nohoch-card-shadow {
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+}
+
+.nohoch-soft-shadow {
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.22);
 }
