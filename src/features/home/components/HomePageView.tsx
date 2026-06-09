@@ -2,7 +2,7 @@ import type { HomeContent, HomePackage } from "@/features/home/types/home.types"
 import type { Locale } from "@/shared/config/locales";
 import type { HeroSlideData } from "@/lib/queries";
 import { HomeHero } from "@/features/home/components/HomeHero";
-import { HomePackages } from "@/features/home/components/HomePackages";
+import { HomePackagesWithBooking } from "@/features/home/components/HomePackagesWithBooking";
 import { HomeAbout } from "@/features/home/components/HomeAbout";
 import { HomeExperiences } from "@/features/home/components/HomeExperiences";
 import { HomeMagic } from "@/features/home/components/HomeMagic";
@@ -14,7 +14,7 @@ type HomePageViewProps = {
   packages: HomePackage[];
 };
 
-export function HomePageView({ content, heroSlides, packages }: HomePageViewProps) {
+export function HomePageView({ content, locale, heroSlides, packages }: HomePageViewProps) {
   // Merge dynamic hero into static content shape
   const heroContent = heroSlides
     ? {
@@ -28,7 +28,7 @@ export function HomePageView({ content, heroSlides, packages }: HomePageViewProp
   return (
     <main className="min-h-screen overflow-hidden bg-[#042f35]">
       <HomeHero content={heroContent} />
-      <HomePackages content={{ ...content.packages, items: packages }} />
+      <HomePackagesWithBooking content={{ ...content.packages, items: packages }} locale={locale} />
       <HomeAbout content={content.about} />
       <HomeExperiences content={content.experiences} />
       <HomeMagic content={content.magic} />

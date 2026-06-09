@@ -1,3 +1,19 @@
+/** PackageItem: shape returned by the booking API (kiichpam backend) */
+export type PackageItem = {
+  id: string;
+  code: string;
+  image: string;
+  adultPriceMXN: number;
+  childPriceMXN: number;
+  infantPriceMXN: number;
+  inapamPriceMXN?: number | null;
+  currency: string;
+  translation?: {
+    name: string;
+    description?: string;
+  };
+};
+
 export type HomePackage = {
   id: string;
   name: string;
@@ -13,6 +29,7 @@ export type HomeExperience = {
   id: string;
   title: string;
   image: string;
+  youtubeId?: string;
 };
 
 export type HomeContent = {

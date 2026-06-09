@@ -1,7 +1,7 @@
 "use client";
 
+import { useRef } from "react";
 import { motion } from "framer-motion";
-import { Play } from "lucide-react";
 import type { HomeContent } from "@/features/home/types/home.types";
 import { Container } from "@/shared/components/ui/Container";
 
@@ -11,8 +11,18 @@ type HomeMagicProps = {
 
 const DIVIDER_SRC = "/images/home/experiences/experience-divider.png";
 const TEXTURE_SRC = "/images/home/majic/textura.png";
+const YOUTUBE_ID = "H6_vVvoTB3k";
+
+function ytCommand(iframe: HTMLIFrameElement, func: "playVideo" | "pauseVideo") {
+  iframe.contentWindow?.postMessage(
+    JSON.stringify({ event: "command", func, args: [] }),
+    "*"
+  );
+}
 
 export function HomeMagic({ content }: HomeMagicProps) {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
   return (
     <section className="relative overflow-hidden bg-[#006f73] py-[125px]">
       {/* Textura de fondo */}
@@ -25,16 +35,10 @@ export function HomeMagic({ content }: HomeMagicProps) {
         }}
       />
 
-      {/* Divisor superior (estalactitas desde arriba) */}
+      {/* Divisor superior */}
       <div className="pointer-events-none absolute left-1/2 top-[-30px] z-30 h-[140px] w-[118%] -translate-x-1/2 sm:w-[122%] lg:w-[128%]">
-        <img
-          src={DIVIDER_SRC}
-          alt=""
-          aria-hidden="true"
-          className="block h-full w-full object-fill object-top"
-        />
+        <img src={DIVIDER_SRC} alt="" aria-hidden="true" className="block h-full w-full object-fill object-top" />
       </div>
-
 
       <Container className="relative z-20">
         <motion.div
@@ -52,26 +56,35 @@ export function HomeMagic({ content }: HomeMagicProps) {
           </p>
         </motion.div>
 
+        {/* Video card */}
         <motion.div
           initial={{ opacity: 0, y: 34 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.65 }}
-          className="group relative mx-auto h-[330px] max-w-5xl overflow-hidden rounded-[2rem] shadow-[0_24px_70px_rgba(0,0,0,0.35)] sm:h-[430px] lg:h-[500px]"
-          style={{
-            backgroundImage: `url(${content.image})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
+          onMouseEnter={() => iframeRef.current && ytCommand(iframeRef.current, "playVideo")}
+          onMouseLeave={() => iframeRef.current && ytCommand(iframeRef.current, "pauseVideo")}
+          className="group relative mx-auto max-w-5xl overflow-hidden rounded-[2rem] shadow-[0_24px_70px_rgba(0,0,0,0.35)] cursor-pointer"
+          style={{ aspectRatio: "16/9" }}
         >
-          <div className="absolute inset-0 bg-black/20 transition duration-300 group-hover:bg-black/10" />
-          <button
-            type="button"
-            className="absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-[3px] border-white bg-white/10 text-white backdrop-blur-[2px] transition duration-300 group-hover:scale-110 group-hover:bg-white group-hover:text-[#004E5A]"
-            aria-label={content.title}
-          >
-            <Play size={30} fill="currentColor" className="ml-1" />
-          </button>
+          {/* iframe sin controles, controles tapados con offset */}
+          <iframe
+            ref={iframeRef}
+            src={`https://www.youtube.com/embed/${YOUTUBE_ID}?enablejsapi=1&controls=0&mute=1&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&playsinline=1`}
+            title={content.title}
+            allow="autoplay; encrypted-media"
+            className="absolute left-0 border-0 pointer-events-none"
+            style={{
+              width: "100%",
+              height: "calc(100% + 80px)",
+              top: "-40px",
+            }}
+          />
+          {/* Franja que tapa controles arriba y abajo */}
+          <div className="absolute top-0 left-0 right-0 h-[42px] z-10 rounded-t-[2rem]" style={{ background: "inherit" }} />
+          <div className="absolute bottom-0 left-0 right-0 h-[42px] z-10 bg-[#006f73] rounded-b-[2rem]" />
+          {/* Overlay interacción */}
+          <div className="absolute inset-0 z-20 bg-black/10 transition duration-300 group-hover:bg-black/0" />
         </motion.div>
       </Container>
     </section>
