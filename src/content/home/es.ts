@@ -23,6 +23,7 @@ export const homeEs: HomeContent = {
       items: [
         {
           id: "classic",
+          slug: "clasico",
           name: "Paquete CLÁSICO",
           image: "/images/home/packages/classic.webp",
           price: "$300.00",
@@ -36,6 +37,7 @@ export const homeEs: HomeContent = {
         },
         {
           id: "plus",
+          slug: "plus",
           name: "Paquete PLUS",
           image: "/images/home/packages/plus.webp",
           price: "$550.00",
@@ -52,6 +54,7 @@ export const homeEs: HomeContent = {
         },
         {
           id: "delux",
+          slug: "delux",
           name: "Paquete DELUX",
           image: "/images/home/packages/delux.webp",
           price: "$800.00",

@@ -19,11 +19,11 @@ const DIVIDER_SRC = "/images/home/packages/shapes/packages-divider.svg";
 
 /** Convert HomePackage → PackageItem so the booking modal can use it */
 function toPackageItem(pkg: HomePackage): PackageItem {
-  // price is like "$300.00" → parse numeric value in cents (*100)
-  const numericPrice = parseFloat(pkg.price.replace(/[^0-9.]/g, "")) * 100;
+  // price is like "$300.00" → parse numeric value in pesos
+  const numericPrice = parseFloat(pkg.price.replace(/[^0-9.]/g, ""));
   return {
     id: pkg.id,
-    code: pkg.id.toUpperCase(),
+    code: pkg.slug.toUpperCase(),   // use slug, not cuid
     image: pkg.image,
     adultPriceMXN: numericPrice,
     childPriceMXN: numericPrice,
@@ -107,7 +107,7 @@ export function HomePackagesWithBooking({ content, locale }: Props) {
 
             <div className="mx-auto grid max-w-[1360px] gap-[42px] md:grid-cols-3">
               {content.items.map((item, index) => (
-                <PackageCard key={item.id} item={item} index={index} onReserve={() => handleReserve(item.id)} />
+                <PackageCard key={item.id} item={item} index={index} onReserve={() => handleReserve(item.slug)} />
               ))}
             </div>
           </div>

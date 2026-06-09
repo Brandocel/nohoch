@@ -45,6 +45,7 @@ export async function getPackages(locale: Locale): Promise<HomePackage[]> {
     .filter((p) => p.translations.length > 0)
     .map((p) => ({
       id: p.id,
+      slug: p.slug,
       name: p.translations[0].name,
       image: p.coverImage ?? "",
       price: `$${Number(p.price).toFixed(2)}`,

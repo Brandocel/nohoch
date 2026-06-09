@@ -9,6 +9,15 @@ export interface BookingPaymentFormHandle {
   submit: () => Promise<unknown>;
 }
 
+// Lazy: solo inicializa Stripe si hay una clave pública configurada
+let stripePromise: ReturnType<typeof loadStripe> | null = null;
+function getStripePromise() {
+  const key = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+  if (!key) return null;
+  if (!stripePromise) stripePromise = loadStripe(key);
+  return stripePromise;
+}
+
 interface BookingPaymentFormProps {
   locale: "es" | "en";
   paymentMethod: PaymentMethodType;
@@ -21,7 +30,6 @@ interface BookingPaymentFormProps {
   onCardPaymentSucceeded: (paymentIntentId?: string, status?: string) => void;
 }
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "");
 
 function getText(locale: "es" | "en") {
   return locale === "es"
@@ -117,7 +125,7 @@ const BookingPaymentForm = forwardRef<BookingPaymentFormHandle, BookingPaymentFo
 
           {paymentMethod === "card" ? (
             clientSecret ? (
-              <Elements stripe={stripePromise} options={elementOptions}>
+              <Elements stripe={getStripePromise()} options={elementOptions}>
                 <CardPaymentContent ref={cardPaymentRef} locale={locale} loadingPayment={loadingPayment} paymentError={paymentError} clientSecret={clientSecret} onCardPaymentSucceeded={onCardPaymentSucceeded} />
               </Elements>
             ) : (

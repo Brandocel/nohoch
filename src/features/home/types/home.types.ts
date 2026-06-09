@@ -16,6 +16,7 @@ export type PackageItem = {
 
 export type HomePackage = {
   id: string;
+  slug: string;
   name: string;
   image: string;
   price: string;

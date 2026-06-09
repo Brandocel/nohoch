@@ -37,7 +37,7 @@ export function formatMoney(amount = 0, currency = "MXN", locale: BookingLocale 
     style: "currency",
     currency,
     minimumFractionDigits: 2,
-  }).format(amount / 100);
+  }).format(amount);
 }
 
 export function toApiVisitDate(date: string) {
