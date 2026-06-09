@@ -22,10 +22,10 @@ export function Header({ locale }: HeaderProps) {
   return (
     <>
       <header className="absolute left-0 top-0 z-50 w-full">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0083AD]/85 via-[#00798e]/45 to-transparent" />
-        <div className="absolute inset-0 bg-black/10" />
+        {/* Fondo del header sin línea */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[170px] bg-gradient-to-b from-[#00B3AD]/90 via-[#007C8A]/55 to-transparent sm:h-[180px] lg:h-[200px]" />
 
-        <Container className="relative flex h-[115px] items-center justify-between sm:h-[135px] lg:h-[170px] xl:h-[190px]">
+        <Container className="relative flex h-[95px] items-center justify-between sm:h-[110px] lg:h-[120px] xl:h-[130px]">
           <Link
             href={`/${locale}`}
             className="group inline-flex items-center"
@@ -34,23 +34,22 @@ export function Header({ locale }: HeaderProps) {
             <img
               src="/logo.svg"
               alt="Cenote Nohoch"
-              className="h-auto w-[135px] transition duration-300 group-hover:scale-[1.03] sm:w-[170px] lg:w-[220px] xl:w-[248px]"
+              className="h-auto w-[125px] transition duration-300 group-hover:scale-[1.03] sm:w-[150px] lg:w-[175px] xl:w-[190px]"
             />
           </Link>
 
-          <div className="hidden items-center gap-8 lg:flex xl:gap-12">
+          <div className="hidden items-center gap-7 lg:flex xl:gap-10">
             <Navbar items={items} />
-
             <LanguageSwitcher locale={locale} />
           </div>
 
           <button
             type="button"
             onClick={() => setOpen((current) => !current)}
-            className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white shadow-lg backdrop-blur-md transition duration-300 hover:bg-white/20 lg:hidden"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-md transition duration-300 hover:bg-white/25 lg:hidden"
             aria-label={open ? "Cerrar menú" : "Abrir menú"}
           >
-            {open ? <X size={24} /> : <Menu size={24} />}
+            {open ? <X size={23} /> : <Menu size={23} />}
           </button>
         </Container>
       </header>
