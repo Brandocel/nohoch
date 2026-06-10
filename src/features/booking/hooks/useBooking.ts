@@ -257,16 +257,25 @@ export function useBooking({
     const storedPackageCode = normalizeCode(stored.form?.packageCode);
     const storedCampaignCode = normalizeCode(stored.form?.campaignCode);
     const storedCampaignMap = normalizeCampaignMap(stored.form?.campaignByPackageCode);
-    setPackageCodeState(storedPackageCode || normalizedInitialPackageCode);
+    // initialPackageCode (from the button clicked) always wins over the draft
+    const effectivePackageCode = normalizedInitialPackageCode || storedPackageCode;
+    const draftMatchesPackage = !normalizedInitialPackageCode || storedPackageCode === normalizedInitialPackageCode;
+    setPackageCodeState(effectivePackageCode);
     setCampaignCodeState(storedCampaignCode || normalizedInitialCampaignCode);
     setCampaignByPackageCode(Object.keys(storedCampaignMap).length > 0 ? storedCampaignMap : normalizedInitialCampaignByPackageCode);
-    setVisitDateState(stored.form?.visitDate || "");
-    setAdultsState(stored.form?.adults ?? initialAdults);
-    setChildrenState(stored.form?.children ?? initialChildren);
-    setInfantsState(stored.form?.infants ?? initialInfants);
-    setInapamVisitorsState(stored.form?.inapamVisitors ?? 0);
-    setCouponCodeState(stored.form?.couponCode || "");
-    setExtras(stored.form?.extras ?? []);
+    // If the package changed vs the draft, reset visit/reservation but keep contact info
+    if (draftMatchesPackage) {
+      setVisitDateState(stored.form?.visitDate || "");
+      setAdultsState(stored.form?.adults ?? initialAdults);
+      setChildrenState(stored.form?.children ?? initialChildren);
+      setInfantsState(stored.form?.infants ?? initialInfants);
+      setInapamVisitorsState(stored.form?.inapamVisitors ?? 0);
+      setCouponCodeState(stored.form?.couponCode || "");
+      setExtras(stored.form?.extras ?? []);
+    } else {
+      setVisitDateState(""); setAdultsState(initialAdults); setChildrenState(initialChildren);
+      setInfantsState(initialInfants); setInapamVisitorsState(0); setCouponCodeState(""); setExtras([]);
+    }
     setFirstName(stored.contact?.firstName || ""); setLastName(stored.contact?.lastName || "");
     setEmail(stored.contact?.email || ""); setPhone(stored.contact?.phone || "");
     setCountry(stored.contact?.country || ""); setComments(stored.contact?.comments || "");
@@ -275,7 +284,7 @@ export function useBooking({
     hydratedRef.current = true;
     lastInitialValuesRef.current = initialValuesSignature;
     restoringRef.current = false;
-    void recoverReservationFromDraft(stored);
+    if (draftMatchesPackage) void recoverReservationFromDraft(stored);
   }, [normalizedInitialPackageCode, normalizedInitialCampaignCode, normalizedInitialCampaignByPackageCode, initialAdults, initialChildren, initialInfants, initialValuesSignature]);
 
   useEffect(() => {

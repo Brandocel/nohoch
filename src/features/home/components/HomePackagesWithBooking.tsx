@@ -115,6 +115,7 @@ export function HomePackagesWithBooking({ content, locale }: Props) {
       </section>
 
       <BookingModal
+        key={selectedPackageCode}
         isOpen={modalOpen}
         locale={locale}
         packages={packageItems}
