@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { motion } from "framer-motion";
 import { ContactTextureDivider } from "./ContactTextureDivider";
@@ -10,6 +10,7 @@ type ContactSectionProps = {
   locale: string;
 };
 
+const CONTACT_VIDEO_SRC = "/images/contact/form/golondrina.mp4";
 const CONTACT_IMAGE_SRC = "/images/contact/form/golondrina.png";
 
 const T = {
@@ -86,6 +87,13 @@ const socials = [
 export function ContactSection({ locale }: ContactSectionProps) {
   const t = T[locale as keyof typeof T] ?? T.es;
 
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const resetVideoTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
+
+  const [birdActive, setBirdActive] = useState(false);
+
   const [form, setForm] = useState<FormState>({
     firstName: "",
     lastName: "",
@@ -103,6 +111,36 @@ export function ContactSection({ locale }: ContactSectionProps) {
       ...current,
       [field]: value,
     }));
+  }
+
+  async function playBirdVideo() {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (resetVideoTimeoutRef.current) {
+      clearTimeout(resetVideoTimeoutRef.current);
+      resetVideoTimeoutRef.current = null;
+    }
+
+    try {
+      setBirdActive(true);
+      video.muted = true;
+      await video.play();
+    } catch {
+      setBirdActive(false);
+    }
+  }
+
+  function pauseBirdVideo() {
+    const video = videoRef.current;
+    if (!video) return;
+
+    setBirdActive(false);
+
+    resetVideoTimeoutRef.current = setTimeout(() => {
+      video.pause();
+      video.currentTime = 0;
+    }, 280);
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -261,7 +299,7 @@ export function ContactSection({ locale }: ContactSectionProps) {
               </form>
             </motion.div>
 
-            {/* Imagen derecha */}
+            {/* Video derecha */}
             <motion.div
               initial={{ opacity: 0, x: 24 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -269,14 +307,49 @@ export function ContactSection({ locale }: ContactSectionProps) {
               transition={{ duration: 0.55, delay: 0.08 }}
               className="mx-auto w-full max-w-[510px] lg:mx-0"
             >
-              <div className="relative aspect-[1/1] overflow-hidden rounded-[8px] shadow-[0_12px_35px_rgba(0,0,0,0.18)]">
+              <div
+                className="group relative aspect-[1/1] overflow-hidden rounded-[8px] shadow-[0_12px_35px_rgba(0,0,0,0.18)] transition duration-500 ease-out hover:shadow-[0_18px_48px_rgba(0,0,0,0.24)]"
+                onMouseEnter={playBirdVideo}
+                onMouseLeave={pauseBirdVideo}
+                onFocus={playBirdVideo}
+                onBlur={pauseBirdVideo}
+                onTouchStart={playBirdVideo}
+                tabIndex={0}
+                role="button"
+                aria-label={t.imageAlt}
+              >
+                {/* Imagen base */}
                 <Image
                   src={CONTACT_IMAGE_SRC}
                   alt={t.imageAlt}
                   fill
-                  className="object-cover object-center"
+                  className={`object-cover object-center transition duration-500 ease-out ${
+                    birdActive
+                      ? "scale-[1.025] opacity-0"
+                      : "scale-100 opacity-100"
+                  }`}
                   sizes="(max-width: 1024px) 90vw, 510px"
                 />
+
+                {/* Video encima */}
+                <video
+                  ref={videoRef}
+                  src={CONTACT_VIDEO_SRC}
+                  muted
+                  playsInline
+                  preload="metadata"
+                  className={`absolute inset-0 h-full w-full object-cover object-center transition duration-500 ease-out ${
+                    birdActive
+                      ? "scale-[1.025] opacity-100"
+                      : "scale-100 opacity-0"
+                  }`}
+                />
+
+                {/* Sombra inferior suave */}
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/28 via-black/0 to-transparent opacity-90 transition duration-500 group-hover:opacity-70" />
+
+                {/* Brillo sutil en hover */}
+                <div className="pointer-events-none absolute inset-0 bg-white/0 transition duration-500 group-hover:bg-white/[0.035]" />
               </div>
             </motion.div>
           </div>
