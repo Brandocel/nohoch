@@ -29,7 +29,7 @@ export function HomePageView({ content, locale, heroSlides, packages }: HomePage
     <main className="min-h-screen overflow-hidden bg-[#042f35]">
       <HomeHero content={heroContent} />
       <HomePackagesWithBooking content={{ ...content.packages, items: packages }} locale={locale} />
-      <HomeAbout content={content.about} />
+      <HomeAbout content={content.about} locale={locale} />
       <HomeExperiences content={content.experiences} />
       <HomeMagic content={content.magic} />
     </main>

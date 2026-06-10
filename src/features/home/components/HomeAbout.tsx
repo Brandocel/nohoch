@@ -7,9 +7,10 @@ import { Container } from "@/shared/components/ui/Container";
 
 type HomeAboutProps = {
   content: HomeContent["about"];
+  locale?: string;
 };
 
-export function HomeAbout({ content }: HomeAboutProps) {
+export function HomeAbout({ content, locale = "es" }: HomeAboutProps) {
   const descriptionLines = content.description.split("\n");
 
   return (
@@ -58,9 +59,9 @@ export function HomeAbout({ content }: HomeAboutProps) {
               </p>
             </div>
 
-            {/* Botón */}
+            {/* Botón → página de ubicación */}
             <a
-              href="#contacto"
+              href={`/${locale}/ubicacion`}
               className="relative z-30 mx-auto mt-[26px] flex h-[38px] w-full max-w-[230px] items-center justify-center rounded-[7px] bg-[#ADA51A] font-['Be_Vietnam_Pro',Arial,sans-serif] text-[15px] font-black leading-none text-white transition duration-300 hover:bg-[#c2ba1e] sm:mx-0 sm:w-[204px] lg:absolute lg:left-[520px] lg:top-[58px] lg:mt-0"
             >
               {content.buttonLabel}

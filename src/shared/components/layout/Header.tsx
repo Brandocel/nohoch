@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 import type { Locale } from "@/shared/config/locales";
-import { navigationItems } from "@/shared/config/navigation";
+import { getNavigationItems } from "@/shared/config/navigation";
 import { Navbar } from "@/shared/components/layout/Navbar";
 import { MobileMenu } from "@/shared/components/layout/MobileMenu";
 import { LanguageSwitcher } from "@/shared/components/layout/LanguageSwitcher";
@@ -17,15 +18,36 @@ type HeaderProps = {
 
 export function Header({ locale }: HeaderProps) {
   const [open, setOpen] = useState(false);
-  const items = navigationItems[locale];
+  const pathname = usePathname();
+
+  const items = getNavigationItems(locale);
+
+  const isMapPage =
+    pathname.includes("/ubicacion") ||
+    pathname.includes("/mapa") ||
+    pathname.includes("/location") ||
+    pathname.includes("/map");
 
   return (
     <>
-      <header className="absolute left-0 top-0 z-50 w-full">
-        {/* Fondo del header sin línea */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-[170px] bg-gradient-to-b from-[#00B3AD]/90 via-[#007C8A]/55 to-transparent sm:h-[180px] lg:h-[200px]" />
+      <header
+        className={
+          isMapPage
+            ? "relative left-0 top-0 z-50 w-full bg-[linear-gradient(90deg,#00B3AD_0%,#00586F_100%)]"
+            : "absolute left-0 top-0 z-50 w-full"
+        }
+      >
+        {!isMapPage && (
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-[170px] bg-gradient-to-b from-[#00B3AD]/90 via-[#007C8A]/55 to-transparent sm:h-[180px] lg:h-[200px]" />
+        )}
 
-        <Container className="relative flex h-[95px] items-center justify-between sm:h-[110px] lg:h-[120px] xl:h-[130px]">
+        <Container
+          className={
+            isMapPage
+              ? "relative flex h-[135px] items-center justify-between sm:h-[145px] lg:h-[160px] xl:h-[170px]"
+              : "relative flex h-[95px] items-center justify-between sm:h-[110px] lg:h-[120px] xl:h-[130px]"
+          }
+        >
           <Link
             href={`/${locale}`}
             className="group inline-flex items-center"
@@ -34,7 +56,11 @@ export function Header({ locale }: HeaderProps) {
             <img
               src="/logo.svg"
               alt="Cenote Nohoch"
-              className="h-auto w-[125px] transition duration-300 group-hover:scale-[1.03] sm:w-[150px] lg:w-[175px] xl:w-[190px]"
+              className={
+                isMapPage
+                  ? "h-auto w-[155px] transition duration-300 group-hover:scale-[1.03] sm:w-[185px] lg:w-[215px] xl:w-[235px]"
+                  : "h-auto w-[125px] transition duration-300 group-hover:scale-[1.03] sm:w-[150px] lg:w-[175px] xl:w-[190px]"
+              }
             />
           </Link>
 

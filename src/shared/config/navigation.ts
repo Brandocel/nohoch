@@ -21,7 +21,7 @@ export const navigationItems: Record<Locale, NavigationItem[]> = {
     },
     {
       label: "Contacto",
-      href: "#contacto",
+      href: "/contacto",
     },
     {
       label: "Blog",
@@ -44,7 +44,7 @@ export const navigationItems: Record<Locale, NavigationItem[]> = {
     },
     {
       label: "Contact",
-      href: "#contacto",
+      href: "/contacto",
     },
     {
       label: "Blog",
@@ -52,3 +52,23 @@ export const navigationItems: Record<Locale, NavigationItem[]> = {
     },
   ],
 };
+
+export function getNavigationItems(locale: Locale): NavigationItem[] {
+  return navigationItems[locale].map((item) => {
+    if (item.href.startsWith("#")) {
+      return {
+        ...item,
+        href: `/${locale}${item.href}`,
+      };
+    }
+
+    if (item.href.startsWith("/")) {
+      return {
+        ...item,
+        href: `/${locale}${item.href}`,
+      };
+    }
+
+    return item;
+  });
+}
