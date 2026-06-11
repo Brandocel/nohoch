@@ -30,6 +30,7 @@ export type HomeExperience = {
   id: string;
   title: string;
   image: string;
+  videoSrc?: string;
   youtubeId?: string;
 };
 

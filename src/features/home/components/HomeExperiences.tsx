@@ -15,13 +15,6 @@ type HomeExperiencesProps = {
 
 const DIVIDER_SRC = "/images/home/experiences/experience-divider.png";
 
-function ytCommand(iframe: HTMLIFrameElement, func: "playVideo" | "pauseVideo") {
-  iframe.contentWindow?.postMessage(
-    JSON.stringify({ event: "command", func, args: [] }),
-    "*"
-  );
-}
-
 function ExperienceVideoCard({
   item,
   index,
@@ -29,14 +22,15 @@ function ExperienceVideoCard({
   item: HomeExperience;
   index: number;
 }) {
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const handleMouseEnter = () => {
-    if (iframeRef.current) ytCommand(iframeRef.current, "playVideo");
+    videoRef.current?.play();
   };
 
   const handleMouseLeave = () => {
-    if (iframeRef.current) ytCommand(iframeRef.current, "pauseVideo");
+    videoRef.current?.pause();
+    // No reseteamos: el video se queda en el frame actual
   };
 
   return (
@@ -50,36 +44,27 @@ function ExperienceVideoCard({
       className="group relative overflow-hidden bg-black shadow-[0_24px_45px_rgba(0,0,0,0.35)] cursor-pointer"
       style={{ aspectRatio: "9/16" }}
     >
-      {item.youtubeId ? (
-        <>
-          {/* iframe: más alto que el contenedor, desplazado para ocultar controles */}
-          <iframe
-            ref={iframeRef}
-            src={`https://www.youtube.com/embed/${item.youtubeId}?enablejsapi=1&controls=0&mute=1&loop=1&playlist=${item.youtubeId}&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&playsinline=1`}
-            title={item.title}
-            allow="autoplay; encrypted-media"
-            className="absolute left-0 border-0 pointer-events-none"
-            style={{
-              width: "100%",
-              height: "calc(100% + 80px)",
-              top: "-40px",
-            }}
-          />
-          {/* Overlay para bloquear interacción */}
-          <div className="absolute inset-0 z-10 bg-black/10 transition duration-300 group-hover:bg-black/0" />
-        </>
+      {item.videoSrc ? (
+        <video
+          ref={videoRef}
+          src={item.videoSrc}
+          muted
+          playsInline
+          loop
+          preload="metadata"
+          className="absolute inset-0 h-full w-full object-cover object-center"
+        />
       ) : (
-        <>
-          <Image
-            src={item.image}
-            alt={item.title}
-            fill
-            sizes="(max-width: 768px) 100vw, 33vw"
-            className="object-cover object-center transition duration-700 group-hover:scale-105"
-          />
-          <div className="absolute inset-0 bg-black/10 transition duration-300 group-hover:bg-black/0" />
-        </>
+        <Image
+          src={item.image}
+          alt={item.title}
+          fill
+          sizes="(max-width: 768px) 100vw, 33vw"
+          className="object-cover object-center"
+        />
       )}
+      {/* Overlay gris que desaparece al hover */}
+      <div className="absolute inset-0 z-10 bg-black/35 transition-opacity duration-400 group-hover:opacity-0" />
     </motion.article>
   );
 }

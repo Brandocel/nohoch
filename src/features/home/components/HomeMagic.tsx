@@ -11,17 +11,10 @@ type HomeMagicProps = {
 
 const DIVIDER_SRC = "/images/home/experiences/experience-divider.png";
 const TEXTURE_SRC = "/images/home/majic/textura.png";
-const YOUTUBE_ID = "H6_vVvoTB3k";
-
-function ytCommand(iframe: HTMLIFrameElement, func: "playVideo" | "pauseVideo") {
-  iframe.contentWindow?.postMessage(
-    JSON.stringify({ event: "command", func, args: [] }),
-    "*"
-  );
-}
+const VIDEO_SRC = "/images/home/experiences/videonohoch.mp4";
 
 export function HomeMagic({ content }: HomeMagicProps) {
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   return (
     <section className="relative overflow-hidden bg-[#008d84] pb-[95px] pt-[72px] sm:pt-[82px] lg:pb-[115px] lg:pt-[90px]">
@@ -69,25 +62,23 @@ export function HomeMagic({ content }: HomeMagicProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.65 }}
-          onMouseEnter={() =>
-            iframeRef.current && ytCommand(iframeRef.current, "playVideo")
-          }
-          onMouseLeave={() =>
-            iframeRef.current && ytCommand(iframeRef.current, "pauseVideo")
-          }
+          onMouseEnter={() => videoRef.current?.play()}
+          onMouseLeave={() => videoRef.current?.pause()}
           className="group relative mx-auto w-full max-w-[1140px] cursor-pointer overflow-hidden bg-black"
           style={{ aspectRatio: "1140 / 455" }}
         >
-          <iframe
-            ref={iframeRef}
-            src={`https://www.youtube.com/embed/${YOUTUBE_ID}?enablejsapi=1&controls=0&mute=1&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&playsinline=1`}
-            title={content.title}
-            allow="autoplay; encrypted-media"
-            className="pointer-events-none absolute left-0 top-1/2 h-[145%] w-full -translate-y-1/2 border-0"
+          <video
+            ref={videoRef}
+            src={VIDEO_SRC}
+            muted
+            playsInline
+            loop
+            preload="metadata"
+            className="absolute inset-0 h-full w-full object-cover object-center"
           />
 
-          {/* Overlay suave */}
-          <div className="absolute inset-0 z-10 bg-black/5 transition duration-300 group-hover:bg-black/0" />
+          {/* Overlay gris que desaparece al hover */}
+          <div className="absolute inset-0 z-10 bg-black/35 transition-opacity duration-400 group-hover:opacity-0" />
         </motion.div>
       </Container>
     </section>
