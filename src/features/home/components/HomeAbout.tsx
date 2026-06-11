@@ -26,7 +26,7 @@ export function HomeAbout({ content, locale = "es" }: HomeAboutProps) {
           transition={{ duration: 0.6 }}
           className="relative mx-auto max-w-[1330px]"
         >
-          <div className="relative overflow-hidden rounded-[38px] bg-[#00B3AD] px-[28px] pb-[18px] pt-[28px] sm:rounded-[46px] sm:px-[42px] sm:pb-[34px] sm:pt-[38px] lg:min-h-[390px] lg:overflow-visible lg:rounded-[64px] lg:px-[62px] lg:py-[42px]">
+          <div className="relative overflow-visible rounded-[38px] bg-[#00B3AD] px-[28px] pb-0 pt-[28px] sm:rounded-[46px] sm:px-[42px] sm:pb-[34px] sm:pt-[38px] lg:min-h-[390px] lg:rounded-[64px] lg:px-[62px] lg:py-[42px]">
             {/* Texto */}
             <div className="relative z-20 max-w-[700px]">
               <h2 className="font-['Be_Vietnam_Pro',Arial,sans-serif] text-[36px] font-black leading-[1.05] tracking-[-0.025em] text-white sm:text-[44px] lg:text-[48px]">
@@ -68,7 +68,7 @@ export function HomeAbout({ content, locale = "es" }: HomeAboutProps) {
             </a>
 
             {/* Imagen */}
-            <div className="pointer-events-none relative z-20 mx-auto mt-[34px] h-[350px] w-[118%] max-w-none -translate-x-[4%] sm:mt-8 sm:h-[430px] sm:w-full sm:max-w-[650px] sm:translate-x-0 lg:absolute lg:right-[-120px] lg:top-1/2 lg:mt-0 lg:h-[620px] lg:w-[720px] lg:-translate-y-1/2 xl:right-[-135px] xl:h-[680px] xl:w-[790px]">
+            <div className="pointer-events-none relative z-20 mx-auto mt-[34px] -mb-[175px] h-[350px] w-[118%] max-w-none -translate-x-[4%] sm:mb-0 sm:mt-8 sm:h-[430px] sm:w-full sm:max-w-[650px] sm:translate-x-0 lg:absolute lg:right-[-120px] lg:top-1/2 lg:mt-0 lg:h-[620px] lg:w-[720px] lg:-translate-y-1/2 xl:right-[-135px] xl:h-[680px] xl:w-[790px]">
               <Image
                 src={content.image}
                 alt={content.title}

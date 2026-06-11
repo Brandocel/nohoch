@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { Navigation } from "lucide-react";
 
@@ -21,6 +22,12 @@ const DESDE_VALLADOLID =
 
 const EMBED_SRC =
   "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3748.0!2d-87.4760!3d20.1850!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sCenote+Nohoch+Nah+Chich!5e0!3m2!1ses!2smx!4v1";
+
+const ROUTE_VIDEOS: Record<string, string> = {
+  cancun: "/images/home/map/cancun.mp4",
+  merida: "/images/home/map/merida.mp4",
+  valladolid: "/images/home/map/valladolid.mp4",
+};
 
 const BACKGROUND_TEXTURE_SRC = "/images/home/majic/textura.png";
 
@@ -83,6 +90,14 @@ const socials = [
 
 export function MapLocationFollow({ locale }: MapLocationFollowProps) {
   const t = T[locale as keyof typeof T] ?? T.es;
+  const [activeVideo, setActiveVideo] = useState<string | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handleRouteClick = (key: string) => {
+    setActiveVideo(key);
+    // Espera a que el video se monte y lo reproduce
+    setTimeout(() => videoRef.current?.play(), 50);
+  };
 
   return (
     <section className="relative overflow-hidden bg-[#008D84]">
@@ -125,31 +140,49 @@ export function MapLocationFollow({ locale }: MapLocationFollowProps) {
               </a>
             </div>
 
-            <a
-              href={GOOGLE_MAPS_URL}
-              target="_blank"
-              rel="noreferrer"
+            <button
+              type="button"
+              onClick={() => {
+                if (!navigator.geolocation) {
+                  window.open(GOOGLE_MAPS_URL, "_blank");
+                  return;
+                }
+                navigator.geolocation.getCurrentPosition(
+                  (pos) => {
+                    const { latitude, longitude } = pos.coords;
+                    window.open(
+                      `https://www.google.com/maps/dir/${latitude},${longitude}/Cenote+Nohoch+Tulum`,
+                      "_blank"
+                    );
+                  },
+                  () => {
+                    // Si el usuario deniega, abre solo la ubicación del cenote
+                    window.open(GOOGLE_MAPS_URL, "_blank");
+                  }
+                );
+              }}
               className="mt-10 inline-flex h-[37px] w-fit items-center gap-2 rounded-[6px] bg-[#00586F] px-5 font-['Be_Vietnam_Pro',Arial,sans-serif] text-[13px] font-black text-white shadow-[0_10px_22px_rgba(0,0,0,0.18)] transition hover:scale-[1.02] hover:bg-[#004E5A]"
             >
               <Navigation size={15} />
               {t.openMaps}
-            </a>
+            </button>
 
-            <div className="mt-7 flex flex-wrap gap-2">
+            <div className="mt-7 flex gap-2">
               {[
-                { label: t.fromCancun, href: DESDE_CANCUN },
-                { label: t.fromMerida, href: DESDE_MERIDA },
-                { label: t.fromValladolid, href: DESDE_VALLADOLID },
-              ].map(({ label, href }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex h-[34px] items-center justify-center rounded-[6px] bg-[#00586F] px-4 font-['Be_Vietnam_Pro',Arial,sans-serif] text-[12px] font-black text-white transition hover:scale-[1.02] hover:bg-[#004E5A]"
+                { label: t.fromCancun, key: "cancun" },
+                { label: t.fromMerida, key: "merida" },
+                { label: t.fromValladolid, key: "valladolid" },
+              ].map(({ label, key }) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => handleRouteClick(key)}
+                  className={`flex-1 h-[34px] items-center justify-center rounded-[6px] px-2 font-['Be_Vietnam_Pro',Arial,sans-serif] text-[12px] font-black text-white transition hover:scale-[1.02] ${
+                    activeVideo === key ? "bg-[#ADA51A]" : "bg-[#00586F] hover:bg-[#004E5A]"
+                  }`}
                 >
                   {label}
-                </a>
+                </button>
               ))}
             </div>
           </motion.div>
@@ -163,17 +196,28 @@ export function MapLocationFollow({ locale }: MapLocationFollowProps) {
             className="flex min-w-0 flex-col"
           >
             <div className="w-full overflow-hidden border-2 border-[#00A6E8] border-r-0 bg-[#004E5A]">
-              <iframe
-                src={EMBED_SRC}
-                width="100%"
-                height="442"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title={t.mapTitle}
-                className="block h-[340px] w-full sm:h-[400px] lg:h-[442px]"
-              />
+              {activeVideo ? (
+                <video
+                  ref={videoRef}
+                  key={activeVideo}
+                  src={ROUTE_VIDEOS[activeVideo]}
+                  controls
+                  playsInline
+                  className="block h-[340px] w-full object-cover sm:h-[400px] lg:h-[442px]"
+                />
+              ) : (
+                <iframe
+                  src={EMBED_SRC}
+                  width="100%"
+                  height="442"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title={t.mapTitle}
+                  className="block h-[340px] w-full sm:h-[400px] lg:h-[442px]"
+                />
+              )}
             </div>
 
             {/* Síguenos pegado al mapa */}

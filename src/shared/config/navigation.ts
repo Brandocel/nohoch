@@ -17,7 +17,7 @@ export const navigationItems: Record<Locale, NavigationItem[]> = {
     },
     {
       label: "Promociones",
-      href: "#promociones",
+      href: "/promociones",
     },
     {
       label: "Contacto",
@@ -40,7 +40,7 @@ export const navigationItems: Record<Locale, NavigationItem[]> = {
     },
     {
       label: "Promotions",
-      href: "#promociones",
+      href: "/promociones",
     },
     {
       label: "Contact",
