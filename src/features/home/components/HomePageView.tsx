@@ -27,7 +27,7 @@ export function HomePageView({ content, locale, heroSlides, packages }: HomePage
 
   return (
     <main className="min-h-screen overflow-hidden bg-[#042f35]">
-      <HomeHero content={heroContent} />
+      <HomeHero content={heroContent} locale={locale} />
       <HomePackagesWithBooking content={{ ...content.packages, items: packages }} locale={locale} />
       <HomeAbout content={content.about} locale={locale} />
       <HomeExperiences content={content.experiences} />

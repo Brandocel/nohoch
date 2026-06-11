@@ -7,9 +7,10 @@ import type { HomeContent } from "@/features/home/types/home.types";
 
 type HomeHeroProps = {
   content: HomeContent["hero"];
+  locale?: string;
 };
 
-export function HomeHero({ content }: HomeHeroProps) {
+export function HomeHero({ content, locale = "es" }: HomeHeroProps) {
   const formattedTitle = content.title.includes("\n")
     ? content.title
     : content.title
@@ -74,7 +75,7 @@ export function HomeHero({ content }: HomeHeroProps) {
           transition={{ duration: 0.7 }}
           className="mx-auto flex max-w-[1180px] flex-col items-center"
         >
-          <h1 className="whitespace-pre-line text-center text-[52px] font-extrabold leading-[0.95] tracking-[-0.045em] text-white drop-shadow-[0_8px_24px_rgba(0,0,0,0.35)] sm:text-[68px] md:text-[82px] lg:text-[96px] xl:text-[104px]">
+          <h1 className={`whitespace-pre-line text-center font-extrabold leading-[0.95] tracking-[-0.045em] text-white drop-shadow-[0_8px_24px_rgba(0,0,0,0.35)] ${locale === "en" ? "text-[44px] sm:text-[58px] md:text-[70px] lg:text-[82px] xl:text-[90px]" : "text-[52px] sm:text-[68px] md:text-[82px] lg:text-[96px] xl:text-[104px]"}`}>
             {formattedTitle}
           </h1>
 

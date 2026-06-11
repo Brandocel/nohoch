@@ -9,7 +9,7 @@ export const homeEn: HomeContent = {
 
   hero: {
     badge: "Natural cenote · Adventure · Nature",
-    title: "Adventure and relax\nin a cenote",
+    title: "Adventure and\nrelax in a cenote",
     subtitle: "Enjoy zipline, snorkel and buffet at Nohoch",
     primaryButton: "View packages",
     secondaryButton: "Discover cenote",
@@ -77,7 +77,7 @@ export const homeEn: HomeContent = {
     title: "Cenote Nohoch",
     subtitle: "Live an unforgettable adventure!",
     description:
-      "Explore this enchanted place that offers an exceptional experience with activities for every taste. Dive into its clear waters, enter its fascinating caves and admire the diversity of life it shelters. Enjoy exciting snorkeling or diving sessions to discover the unique fauna of the cenote.",
+      "Explore this enchanted place that offers an exceptional\nexperience with activities for every taste. Dive into its\nclear waters, enter its fascinating caves and admire the\ndiversity of life it shelters. Enjoy exciting snorkeling\nor diving sessions to discover the unique fauna of the cenote.",
     buttonLabel: "Find us",
     image: "/images/home/about/about.webp",
   },
@@ -91,16 +91,19 @@ export const homeEn: HomeContent = {
         id: "water",
         title: "Crystal clear waters",
         image: "/images/home/experiences/experience-1.webp",
+        youtubeId: "1-hV_wAtthI",
       },
       {
         id: "cave",
         title: "Natural caves",
         image: "/images/home/experiences/experience-2.webp",
+        youtubeId: "xSx46NbvJPU",
       },
       {
         id: "zipline",
         title: "Zipline adventure",
         image: "/images/home/experiences/experience-3.webp",
+        youtubeId: "PngKLLdnrtU",
       },
     ],
   },
